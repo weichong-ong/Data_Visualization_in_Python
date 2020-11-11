@@ -37,10 +37,6 @@ The five steps of the data analysis process:
 ### Adaptations of Univariate Plots
 Histogram of quantitative variable against the qualitative subsets of the data: **faceting**
 
-<p align="center">
-  <img src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
-</p>
-
 ```
 # Convert the "VClass" column from a plain object type into an ordered categorical type
 sedan_classes = ['Minicompact Cars', 'Subcompact Cars', 'Compact Cars', 'Midsize Cars', 'Large Cars']
@@ -51,12 +47,11 @@ bin_edges = np.arange(12, 58+2, 2)
 g = sb.FacetGrid(data = fuel_econ, col = 'VClass', col_wrap=3, sharey=False)
 g.map(plt.hist, 'comb', bins = bin_edges);
 ```
+<p align="center">
+  <img src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
+</p>
 
 Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**
-
-<p align="center">
-  <img src="/images/Adapted_Bivariante_barchart.png" width="400" />
-</p>
 
 ```
 base_color = sb.color_palette()[0]
@@ -64,7 +59,7 @@ sb.barplot(data=fuel_econ, x='comb', y = 'make', order = order, ci = 'sd', color
 plt.xlabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
 <p align="center">
-  <img src="/images/Adapted_Bivariante_pointplot.png" width="400" />
+  <img src="/images/Adapted_Bivariante_barchart.png" width="400" />
 </p>
 
 ```
@@ -72,12 +67,11 @@ sb.pointplot(data=fuel_econ, x='VClass', y='comb', color=base_color, ci='sd', li
 plt.xticks(rotation=15);
 plt.ylabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
+<p align="center">
+  <img src="/images/Adapted_Bivariante_pointplot.png" width="400" />
+</p>
 
 Mean of quantitative variable vs another quantitative variable: **line plots**
-
-<p align="center">
-  <img src="/images/Adapted_Bivariante_lineplot.png" width="400" />
-</p>
 
 ```
 # Set a number of bins into which the data will be grouped.
@@ -95,6 +89,9 @@ std = df['comb'].groupby(num_var_binned).std()
 # Plot the summarized data
 plt.errorbar(x=bin_centers, y=mean, yerr=std)
 ```
+<p align="center">
+  <img src="/images/Adapted_Bivariante_lineplot.png" width="400" />
+</p>
 
 ## Multivariate Data Exploration
 There are four major cases to consider when we want to plot three variables together:
@@ -118,7 +115,9 @@ for cat, marker in cat_markers:
     plt.scatter(data = df_cat, x = 'num_var1', y = 'num_var2', marker = marker)
 plt.legend(['A','B'])
 ```
-<img align = "left" src="/images/Encoding_shape_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Encoding_shape_cat.png" width="400" />
+</p>
 
 ### Encoding via Size
 ```
@@ -132,7 +131,9 @@ for s in sizes:
     legend_obj.append(plt.scatter([], [], s = s, color = base_color))
 plt.legend(legend_obj, sizes)
 ```
-<img align = "left" src="/images/Encoding_size_num.png" width="400" />
+<p align="center">
+  <img src="/images/Encoding_size_num.png" width="400" />
+</p>
 
 ### Encoding via Color
 If we have a **qualitative** variable, we can set different colors for different levels of a categorical variable through the "hue" parameter on seaborn's FacetGrid class.
@@ -142,7 +143,9 @@ g = sb.FacetGrid(data = df, hue = 'cat_var1', size = 5)
 g.map(plt.scatter, 'num_var1', 'num_var2')
 g.add_legend()
 ```
-<img align = "left" src="/images/Encoding_color_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Encoding_color_cat.png" width="400" />
+</p>
 
 For **quantitative** variables, we should not take the same approach, since FacetGrid expects any variable input for subsetting to be categorical. Instead, we can set color based on numeric value in the scatter function through the "c" parameter, much like how we set up marker sizes through "s".
 
@@ -150,7 +153,9 @@ For **quantitative** variables, we should not take the same approach, since Face
 plt.scatter(data = df, x = 'num_var1', y = 'num_var2', c = 'num_var3')
 plt.colorbar()
 ```
-<img align = "left" src="/images/Encoding_color_num.png" width="400" />
+<p align="center">
+  <img src="/images/Encoding_color_num.png" width="400" />
+</p>
 
 Color Palettes: There are three major classes of color palette to consider:
 1. qualitative: nominal data
@@ -166,14 +171,18 @@ Color Palettes: There are three major classes of color palette to consider:
 g = sb.FacetGrid(data = df, col = 'cat_var1', size = 4)
 g.map(sb.boxplot, 'cat_var2', 'num_var2')
 ```
-<img align = "left" src="/images/Faceting_Multivariate_one_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Faceting_Multivariate_one_cat.png" width="400" />
+</p>
 
 ```
 by two qualitative variables:
 g = sb.FacetGrid(data = df, col = 'cat_var2', row = 'cat_var1', size = 2.5, margin_titles = True)
 g.map(plt.scatter, 'num_var1', 'num_var2')
 ```
-<img align = "left" src="/images/Faceting_Multivariate_two_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Faceting_Multivariate_two_cat.png" width="400" />
+</p>
 
 #### Other Adaptations of Bivariate Plots
 Mean of a third quantitative variable in a 2-d histogram of two quantitative variables
@@ -200,7 +209,9 @@ plt.xlabel('num_var1')
 plt.ylabel('num_var2');
 plt.colorbar(label = 'mean(num_var3)');
 ```
-<img align = "left" src="/images/Adaptations_Bivariate_Plots_heatmap_num.png" width="400" />
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_heatmap_num.png" width="400" />
+</p>
 
 Mean of a third quantitative variable in a 2-d histogram of two quatitative variables
 ```
@@ -211,20 +222,26 @@ cat_means = cat_means.pivot(index = 'cat_var2', columns = 'cat_var1',
 sb.heatmap(cat_means, annot = True, fmt = '.3f',
            cbar_kws = {'label' : 'mean(num_var2)'})
 ```
-<img align = "left" src="/images/Adaptations_Bivariate_Plots_heatmap_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_heatmap_cat.png" width="400" />
+</p>
 
 An alternative approach for two quatitative variables and one quantitative variable is to adapt a clustered bar chart using the barplot function
 ```
 ax = sb.barplot(data = df, x = 'cat_var1', y = 'num_var2', hue = 'cat_var2')
 ax.legend(loc = 8, ncol = 3, framealpha = 1, title = 'cat_var2')
 ```
-<img align = "left" src="/images/Adaptations_Bivariate_Plots_Barchart.png" width="400" />
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_Barchart.png" width="400" />
+</p>
 
 ```
 ax = sb.pointplot(data = df, x = 'cat_var1', y = 'num_var2', hue = 'cat_var2',
                   dodge = 0.3, linestyles = "")
 ```
-<img align = "left" src="/images/Adaptations_Bivariate_Plots_Pointplot.png" width="400" />
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_Pointplot.png" width="400" />
+</p>
 
 A line plot can be adapted o create frequency polygons for levels of a categorical variable. We create a custom function to send to a FacetGrid object's `map` function that computes the means in each bin, then plots them as lines via `errorbar`.
 
@@ -249,11 +266,10 @@ g = sb.FacetGrid(data = df, hue = 'cat_var2', size = 5)
 g.map(mean_poly, "num_var1", "num_var2", bins = bin_edges)
 g.set_ylabels('mean(num_var2)')
 g.add_legend()
-
 ```
-<img align = "left" src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="400" />
-
-
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="400" />
+</p>
 
 <!--
 Course Structure
