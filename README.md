@@ -76,7 +76,7 @@ tick_locs = np.arange(0, sqrt_trans(pokemon['weight'].max())+10, 10)
 plt.xticks(tick_locs, sqrt_trans(tick_locs, inverse = True).astype(int));
 ```
 <p align="center">
-  <img src="/images/Custome_Scale_Series.png" width="400" />
+  <img src="/images/Custom_Scale_Series.png" width="400" />
 </p>
 
 ## Bivariate Data Exploration
