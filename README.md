@@ -220,9 +220,8 @@ g.set_ylabels('mean(num_var2)')
 g.add_legend()
 
 ```
-|
 <p align="center">
-  <img src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="1000" />
+  <img src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="300" />
 </p>
 
 
