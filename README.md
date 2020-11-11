@@ -37,6 +37,8 @@ The five steps of the data analysis process:
 ### Adaptations of Univariate Plots
 Histogram of quantitative variable against the qualitative subsets of the data: **faceting**
 
+<img align = "left" src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
+
 ```
 # Convert the "VClass" column from a plain object type into an ordered categorical type
 sedan_classes = ['Minicompact Cars', 'Subcompact Cars', 'Compact Cars', 'Midsize Cars', 'Large Cars']
@@ -47,25 +49,28 @@ bin_edges = np.arange(12, 58+2, 2)
 g = sb.FacetGrid(data = fuel_econ, col = 'VClass', col_wrap=3, sharey=False)
 g.map(plt.hist, 'comb', bins = bin_edges);
 ```
-<img align = "right" src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
 
 Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**
+
+<img align = "left" src="/images/Adapted_Bivariante_barchart.png" width="400" />
 
 ```
 base_color = sb.color_palette()[0]
 sb.barplot(data=fuel_econ, x='comb', y = 'make', order = order, ci = 'sd', color = base_color);
 plt.xlabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
-<img align = "right" src="/images/Adapted_Bivariante_barchart.png" width="400" />
+
+<img align = "left" src="/images/Adapted_Bivariante_pointplot.png" width="400" />
 
 ```
 sb.pointplot(data=fuel_econ, x='VClass', y='comb', color=base_color, ci='sd', linestyles="")
 plt.xticks(rotation=15);
 plt.ylabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
-<img align = "right" src="/images/Adapted_Bivariante_pointplot.png" width="400" />
 
 Mean of quantitative variable vs another quantitative variable: **line plots**
+
+<img align = "left" src="/images/Adapted_Bivariante_lineplot.png" width="400" />
 
 ```
 # Set a number of bins into which the data will be grouped.
@@ -83,7 +88,6 @@ std = df['comb'].groupby(num_var_binned).std()
 # Plot the summarized data
 plt.errorbar(x=bin_centers, y=mean, yerr=std)
 ```
-<img align = "right" src="/images/Adapted_Bivariante_lineplot.png" width="400" />
 
 ## Multivariate Data Exploration
 There are four major cases to consider when we want to plot three variables together:
