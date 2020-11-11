@@ -14,16 +14,11 @@ Exploratory analysis is done when you are searching for insights. These visualiz
 Explanatory analysis is done when you are providing your results for others. These visualizations need to provide you the emphasis necessary to convey your message. They should be accurate, insightful, and visually appealing.
 
 The five steps of the data analysis process:
-
-Extract - Obtain the data from a spreadsheet, SQL, the web, etc.
-
-Clean - Here we could use exploratory visuals.
-
-Explore - Here we use exploratory visuals.
-
-Analyze - Here we might use either exploratory or explanatory visuals.
-
-Share - Here is where explanatory visuals live.
+1. Extract - Obtain the data from a spreadsheet, SQL, the web, etc.
+2. Clean - Here we could use exploratory visuals.
+3. Explore - Here we use exploratory visuals.
+4. Analyze - Here we might use either exploratory or explanatory visuals.
+5. Share - Here is where explanatory visuals live.
 
 ## Univariate Data Exploration
 - Create bar charts for qualitative variables: `sns.countplot()`, `sns.barplot()`, `plt.bar()`
@@ -32,12 +27,12 @@ Share - Here is where explanatory visuals live.
 - Create histograms for quantitative variables: `plt.hist()`, `sns.distplot()`, `sns.histplot()`
 
 ## Bivariate Data Exploration
-Quantitative vs Quantitative: **scatterplots** `plt.scatter()`, `sns.regplot()`, **heat maps (2D Histrogram)** `plt.hist2d()`
-- Heat maps are useful in the following cases:
-  - To represent a plot for discrete vs. another discrete variable
-  - As an alternative to transparency when the data points are enormous
-Quantitative vs Quatitative: **violin plots** `sns.violinplot()`, **box plots*8 `sns.boxplot()`
-Quatitative vs Quatitative: **clustered bar charts**`sns.countplot(data, x, hue)`
+- Quantitative vs Quantitative: **scatterplots** `plt.scatter()`, `sns.regplot()`, **heat maps (2D Histrogram)** `plt.hist2d()`
+  - Heat maps are useful in the following cases:
+    - To represent a plot for discrete vs. another discrete variable
+    - As an alternative to transparency when the data points are enormous
+- Quantitative vs Quatitative: **violin plots** `sns.violinplot()`, **box plots*8 `sns.boxplot()`
+- Quatitative vs Quatitative: **clustered bar charts**`sns.countplot(data, x, hue)`
 
 ### Adaptations of Univariate Plots
 Histogram of quantitative variable against the qualitative subsets of the data: **faceting**
@@ -52,7 +47,7 @@ bin_edges = np.arange(12, 58+2, 2)
 g = sb.FacetGrid(data = fuel_econ, col = 'VClass', col_wrap=3, sharey=False)
 g.map(plt.hist, 'comb', bins = bin_edges);
 ```
-<img align = "left" src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
+<img align = "right" src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
 
 Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**
 
@@ -61,14 +56,14 @@ base_color = sb.color_palette()[0]
 sb.barplot(data=fuel_econ, x='comb', y = 'make', order = order, ci = 'sd', color = base_color);
 plt.xlabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
-<img align = "left" src="/images/Adapted_Bivariante_barchart.png" width="400" />
+<img align = "right" src="/images/Adapted_Bivariante_barchart.png" width="400" />
 
 ```
 sb.pointplot(data=fuel_econ, x='VClass', y='comb', color=base_color, ci='sd', linestyles="")
 plt.xticks(rotation=15);
 plt.ylabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
-<img align = "left" src="/images/Adapted_Bivariante_pointplot.png" width="400" />
+<img align = "right" src="/images/Adapted_Bivariante_pointplot.png" width="400" />
 
 Mean of quantitative variable vs another quantitative variable: **line plots**
 
@@ -88,7 +83,7 @@ std = df['comb'].groupby(num_var_binned).std()
 # Plot the summarized data
 plt.errorbar(x=bin_centers, y=mean, yerr=std)
 ```
-<img align = "left" src="/images/Adapted_Bivariante_lineplot.png" width="400" />
+<img align = "right" src="/images/Adapted_Bivariante_lineplot.png" width="400" />
 
 ## Multivariate Data Exploration
 There are four major cases to consider when we want to plot three variables together:
