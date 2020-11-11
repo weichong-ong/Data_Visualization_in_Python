@@ -27,12 +27,114 @@ The five steps of the data analysis process:
 - Create histograms for quantitative variables: `plt.hist()`, `sns.distplot()`, `sns.histplot()`
 
 ## Bivariate Data Exploration
-- Quantitative vs Quantitative: **scatterplots** `plt.scatter()`, `sns.regplot()`, **heat maps (2D Histrogram)** `plt.hist2d()`
-  - Heat maps are useful in the following cases:
-    - To represent a plot for discrete vs. another discrete variable
-    - As an alternative to transparency when the data points are enormous
-- Quantitative vs Quatitative: **violin plots** `sns.violinplot()`, **box plots*8 `sns.boxplot()`
-- Quatitative vs Quatitative: **clustered bar charts**`sns.countplot(data, x, hue)`
+Quantitative vs Quantitative: **scatterplots** `plt.scatter()`, `sns.regplot(data, x, y, x_jitter, fit_reg)`, **heat maps (2D Histrogram)** `plt.hist2d(data, x, y, cmin, cmap, bins)`
+
+```
+# If truncate=True, the regression line is bounded by the data limits.
+# Else if truncate=False, it extends to the x axis limits.
+# The x_jitter will make each x value will be adjusted randomly by +/-0.3
+# The scatter_kws helps specifying the opaqueness of the data points.
+# The alpha take a value between [0-1], where 0 represents transparent, and 1 is opaque.
+sb.regplot(data = fuel_econ, x = 'year', y = 'comb', truncate=False, x_jitter=0.3, scatter_kws={'alpha':1/20});
+```
+<p align="center">
+  <img src="/images/Bivariate_Plots_regplot.png" width="400" />
+</p>
+
+Heat maps are useful in the following cases:
+- To represent a plot for two discrete variables
+- As an alternative to transparency when the data points are enormous
+
+```
+# Use cmin to set a minimum bound of counts: zero counts will be empty
+# Use cmap to reverse the color map.
+# Specify bin edges
+bins_x = np.arange(0.6, 7+0.3, 0.3)
+bins_y = np.arange(12, 58+3, 3)
+
+plt.hist2d(data = fuel_econ, x = 'displ', y = 'comb', cmin=0.5, cmap='viridis_r', bins = [bins_x, bins_y])
+plt.colorbar()
+plt.xlabel('Displacement (1)')
+plt.ylabel('Combined Fuel Eff. (mpg)');
+```
+<p align="center">
+  <img src="/images/Bivariate_Plots_heatmap.png" width="400" />
+</p>
+
+```
+# Specify bin edges
+bins_x = np.arange(0.6, 7+0.7, 0.7)
+bins_y = np.arange(12, 58+7, 7)
+# Use cmin to set a minimum bound of counts
+# Use cmap to reverse the color map.
+h2d = plt.hist2d(data = fuel_econ, x = 'displ', y = 'comb', cmin=0.5, cmap='viridis_r', bins = [bins_x, bins_y])
+
+plt.colorbar()
+plt.xlabel('Displacement (1)')
+plt.ylabel('Combined Fuel Eff. (mpg)');
+
+# Select the bi-dimensional histogram, a 2D array of samples x and y.
+# Values in x are histogrammed along the first dimension and
+# values in y are histogrammed along the second dimension.
+counts = h2d[0]
+
+# Add text annotation on each cell
+# Loop through the cell counts and add text annotations for each
+for i in range(counts.shape[0]):
+    for j in range(counts.shape[1]):
+        c = counts[i,j]
+        if c >= 100: # increase visibility on darker cells
+            plt.text(bins_x[i]+0.5, bins_y[j]+0.5, int(c),
+                     ha = 'center', va = 'center', color = 'white')
+        elif c > 0:
+            plt.text(bins_x[i]+0.5, bins_y[j]+0.5, int(c),
+                     ha = 'center', va = 'center', color = 'black')
+```
+<p align="center">
+  <img src="/images/Bivariate_Plots_heatmap_annotation.png" width="400" />
+</p>
+
+Quantitative vs Quatitative: **violin plots** `sns.violinplot(data, x, y, inner = 'quartile')`, **box plots** `sns.boxplot(data, x, y)`
+
+```
+# Types of sedan cars
+sedan_classes = ['Minicompact Cars', 'Subcompact Cars', 'Compact Cars', 'Midsize Cars', 'Large Cars']
+
+# Returns the types for sedan_classes with the categories and orderedness
+# Refer - https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.api.types.CategoricalDtype.html
+vclasses = pd.api.types.CategoricalDtype(ordered=True, categories=sedan_classes)
+
+# Use pandas.astype() to convert the "VClass" column from a plain object type into an ordered categorical type
+fuel_econ['VClass'] = fuel_econ['VClass'].astype(vclasses);
+
+# TWO PLOTS IN ONE FIGURE
+plt.figure(figsize = [16, 5])
+base_color = sb.color_palette()[0]
+
+# LEFT plot: violin plot
+plt.subplot(1, 2, 1)
+#Let's return the axes object
+ax1 = sb.violinplot(data=fuel_econ, x='VClass', y='comb', color=base_color, innner='quartile')
+plt.xticks(rotation=15);
+
+# RIGHT plot: box plot
+plt.subplot(1, 2, 2)
+sb.boxplot(data=fuel_econ, x='VClass', y='comb', color=base_color)
+plt.xticks(rotation=15);
+plt.ylim(ax1.get_ylim()) # set y-axis limits to be same as left plot
+```
+<p align="center">
+  <img src="/images/Bivariate_Plots_violinplot_vs_boxplot.png" width="400" />
+</p>
+
+Quatitative vs Quatitative: **clustered bar charts**`sns.countplot(data, x, hue)`
+
+```
+sb.countplot(data = fuel_econ, x = 'VClass', hue = 'trans_type')
+```
+<p align="center">
+  <img src="/images/Bivariate_Plots_Clustered_barchart.png" width="400" />
+</p>
 
 ### Adaptations of Univariate Plots
 Histogram of quantitative variable against the qualitative subsets of the data: **faceting**
