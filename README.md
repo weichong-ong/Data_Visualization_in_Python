@@ -26,6 +26,59 @@ The five steps of the data analysis process:
   - A pie chart is a common univariate plot type that is used to depict relative frequencies for levels of a categorical variable. A pie chart is preferably used when the number of categories is less, and you'd like to see the proportion of each category.
 - Create histograms for quantitative variables: `plt.hist()`, `sns.distplot()`, `sns.histplot()`
 
+### Scale and Transformation
+Certain data distributions will find themselves amenable to scale transformations. The most common example of this is data that follows an approximately log-normal distribution. This is data that, in their natural units, can look highly skewed: lots of points with low values, with a very long tail of data points with large values.
+However, after applying a logarithmic transform to the data, the data will follow a normal distribution.
+
+#### Scale the x-axis to log-type, change the axis limits, and increase the x-ticks
+```
+# Get the ticks for bins between [0 - maximum weight]
+bins = 10 ** np.arange(-1, 3+0.1, 0.1)
+
+# Generate the x-ticks you want to apply
+ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000]
+# Convert ticks into string values, to be displaye dlong the x-axis
+labels = ['{}'.format(v) for v in ticks]
+
+# Plot the histogram
+plt.hist(data=pokemon, x='weight', bins=bins);
+
+# The argument in the xscale() represents the axis scale type to apply.
+# The possible values are: {"linear", "log", "symlog", "logit", ...}
+plt.xscale('log')
+
+# Apply x-ticks
+plt.xticks(ticks, labels);
+```
+<p align="center">
+  <img src="/images/Scale_Axis.png" width="400" />
+</p>
+
+#### Custom scaling the given data Series, instead of using the built-in log scale
+```
+def sqrt_trans(x, inverse = False):
+    """ transformation helper function """
+    if not inverse:
+        return np.sqrt(x)
+    else:
+        return x ** 2
+
+# Bin resizing, to transform the x-axis
+bin_edges = np.arange(0, sqrt_trans(pokemon['weight'].max())+1, 1)
+
+# Plot the scaled data
+plt.hist(pokemon['weight'].apply(sqrt_trans), bins = bin_edges)
+
+# Identify the tick-locations
+tick_locs = np.arange(0, sqrt_trans(pokemon['weight'].max())+10, 10)
+
+# Apply x-ticks
+plt.xticks(tick_locs, sqrt_trans(tick_locs, inverse = True).astype(int));
+```
+<p align="center">
+  <img src="/images/Custome_Scale_Series.png" width="400" />
+</p>
+
 ## Bivariate Data Exploration
 Quantitative vs Quantitative: **scatterplots** `plt.scatter()`, `sns.regplot(data, x, y, x_jitter, fit_reg)`, **heat maps (2D Histrogram)** `plt.hist2d(data, x, y, cmin, cmap, bins)`
 
@@ -124,7 +177,7 @@ plt.xticks(rotation=15);
 plt.ylim(ax1.get_ylim()) # set y-axis limits to be same as left plot
 ```
 <p align="center">
-  <img src="/images/Bivariate_Plots_violinplot_vs_boxplot.png" width="400" />
+  <img src="/images/Bivariate_Plots_violinplot_vs_boxplot.png" width="600" />
 </p>
 
 Quatitative vs Quatitative: **clustered bar charts**`sns.countplot(data, x, hue)`
@@ -329,6 +382,8 @@ sb.heatmap(cat_means, annot = True, fmt = '.3f',
 </p>
 
 An alternative approach for two quatitative variables and one quantitative variable is to adapt a clustered bar chart using the barplot function
+
+Clustered Bar Chart
 ```
 ax = sb.barplot(data = df, x = 'cat_var1', y = 'num_var2', hue = 'cat_var2')
 ax.legend(loc = 8, ncol = 3, framealpha = 1, title = 'cat_var2')
@@ -337,12 +392,24 @@ ax.legend(loc = 8, ncol = 3, framealpha = 1, title = 'cat_var2')
   <img src="/images/Adaptations_Bivariate_Plots_Barchart.png" width="400" />
 </p>
 
+Clustered Point Plot
 ```
 ax = sb.pointplot(data = df, x = 'cat_var1', y = 'num_var2', hue = 'cat_var2',
                   dodge = 0.3, linestyles = "")
 ```
 <p align="center">
   <img src="/images/Adaptations_Bivariate_Plots_Pointplot.png" width="400" />
+</p>
+
+Clustered Box Plot
+```
+df_sub = fuel_econ.loc[fuel_econ['fuelType'].isin(['Premium Gasoline', 'Regular Gasoline'])]
+sb.boxplot(data=df_sub, x = 'VClass', y = 'displ', hue = 'fuelType')
+plt.legend(loc = 6, bbox_to_anchor = (1.0, 0.5)) # legend to right of figure
+plt.xticks(rotation = 15);
+```
+<p align="center">
+  <img src="/images/Adaptations_Bivariate_Plots_Boxplot.png" width="400" />
 </p>
 
 A line plot can be adapted o create frequency polygons for levels of a categorical variable. We create a custom function to send to a FacetGrid object's `map` function that computes the means in each bin, then plots them as lines via `errorbar`.
@@ -371,6 +438,104 @@ g.add_legend()
 ```
 <p align="center">
   <img src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="400" />
+</p>
+
+### Plot Matrices
+#### The relationship between the numeric variables in the data
+```
+g = sb.PairGrid(data = df, vars = ['num_var1', 'num_var2', 'num_var3'])
+g.map_diag(plt.hist)
+g.map_offdiag(plt.scatter)
+```
+<p align="center">
+  <img src="/images/Plot_Matrices_PairGrid_Hist.png" width="400" />
+</p>
+
+#### The relationship between the numeric and categorical variables in the data
+```
+g = sb.PairGrid(data = df, x_vars = ['num_var1', 'num_var2', 'num_var3'],
+                y_vars = ['cat_var1','cat_var2'])
+g.map(sb.violinplot, inner = 'quartile')
+```
+<p align="center">
+  <img src="/images/Plot_Matrices_PairGrid_Violin.png" width="400" />
+</p>
+
+### Correlation Matrices
+For numeric variables, it can be useful to create a correlation matrix as part of your exploration.
+```
+sb.heatmap(df.corr(), annot = True, fmt = '.2f', cmap = 'vlag_r', center = 0)
+```
+<p align="center">
+  <img src="/images/Plot_Matrices_HeatMap.png" width="400" />
+</p>
+
+### Feature Engineering
+Feature engineering is all about creating a new variable with a sum, difference, product, or ratio between those original variables that may lend a better insight into the research questions we seek to answer.
+
+Another way that you can perform feature engineering is to use the cut function to divide a numeric variable into ordered bins. When we split a numeric variable into ordinal bins, it opens it up to more visual encodings. For example, we might facet plots by bins of a numeric variable, or use discrete color bins rather than a continuous color scale.
+This kind of discretization step might help in storytelling by clearing up noise, allowing the reader to concentrate on major trends in the data. Of course, the bins might also mislead if they're spaced improperly
+
+## Explanatory Visualizations
+Explanatory Visualizations are the key component of the communication at the end of an analysis project. A picture is worth a thousand words.
+A good explanatory visualization will help us to convey the findings and impress the audience, be it a friend, boss or the world.
+
+Telling stories with data follows these steps:
+1. Start with a Question
+2. Repetition of the problem is a Good Thing
+3. Highlight the Answer
+4. Call Your Audience To Action
+
+### Polishing Plots
+- Choose an appropriate plot
+- Choose appropriate encodings
+- Pay attention to design integrity (minimize chart junk and maximize the data-ink ratio)
+- Label axes and choose appropriate tick marks
+- Provide legends for non-positional variables
+- Title the plot and include descriptive comments
+  - The main difference between `suptitle` and `title` is that the former sets a title for the Figure as a whole, and the latter for only a single Axes. If using faceting or subplotting, we want to use `suptitle` to set a title for the figure as a whole.
+
+```
+# loading in the data, sampling to reduce points plotted
+fuel_econ = pd.read_csv('./data/fuel_econ.csv')
+
+np.random.seed(2018)
+sample = np.random.choice(fuel_econ.shape[0], 200, replace = False)
+fuel_econ_subset = fuel_econ.loc[sample]
+
+# plotting the data
+plt.figure(figsize = [7,4])
+plt.scatter(data = fuel_econ_subset, x = 'displ', y = 'comb', c = 'co2',
+            cmap = 'viridis_r')
+plt.title('Fuel Efficiency and CO2 Output by Engine Size')
+plt.xlabel('Displacement (l)')
+plt.ylabel('Combined Fuel Eff. (mpg)')
+plt.colorbar(label = 'CO2 (g/mi)');
+```
+<p align="center">
+  <img src="/images/Polished_Plot.png" width="400" />
+</p>
+
+```
+# set up a dictionary to map types to colors
+type_colors = {'fairy': '#ee99ac', 'dragon': '#7038f8'}
+
+# plotting
+g = sb.FacetGrid(data = pokemon_sub, hue = 'type', size = 5,
+                 palette = type_colors)
+g.map(plt.scatter, 'weight','height')
+g.set(xscale = 'log') # need to set scaling before customizing ticks
+x_ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000]
+g.set(xticks = x_ticks, xticklabels = x_ticks)
+
+# add labels and titles
+g.set_xlabels('Weight (kg)')
+g.set_ylabels('Height (m)')
+plt.title('Heights and Weights for Fairy- and Dragon-type Pokemon')
+plt.legend(['Fairy', 'Dragon'], title = 'Pokemon Type');
+```
+<p align="center">
+  <img src="/images/Polished_Plot_2.png" width="400" />
 </p>
 
 <!--
