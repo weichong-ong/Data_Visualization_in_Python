@@ -37,7 +37,9 @@ The five steps of the data analysis process:
 ### Adaptations of Univariate Plots
 Histogram of quantitative variable against the qualitative subsets of the data: **faceting**
 
-<img align = "left" src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
+<p align="center">
+  <img src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
+</p>
 
 ```
 # Convert the "VClass" column from a plain object type into an ordered categorical type
@@ -52,15 +54,18 @@ g.map(plt.hist, 'comb', bins = bin_edges);
 
 Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**
 
-<img align = "left" src="/images/Adapted_Bivariante_barchart.png" width="400" />
+<p align="center">
+  <img src="/images/Adapted_Bivariante_barchart.png" width="400" />
+</p>
 
 ```
 base_color = sb.color_palette()[0]
 sb.barplot(data=fuel_econ, x='comb', y = 'make', order = order, ci = 'sd', color = base_color);
 plt.xlabel('Avg. Combined Fuel Efficiency (mpg)')
 ```
-
-<img align = "left" src="/images/Adapted_Bivariante_pointplot.png" width="400" />
+<p align="center">
+  <img src="/images/Adapted_Bivariante_pointplot.png" width="400" />
+</p>
 
 ```
 sb.pointplot(data=fuel_econ, x='VClass', y='comb', color=base_color, ci='sd', linestyles="")
@@ -70,7 +75,9 @@ plt.ylabel('Avg. Combined Fuel Efficiency (mpg)')
 
 Mean of quantitative variable vs another quantitative variable: **line plots**
 
-<img align = "left" src="/images/Adapted_Bivariante_lineplot.png" width="400" />
+<p align="center">
+  <img src="/images/Adapted_Bivariante_lineplot.png" width="400" />
+</p>
 
 ```
 # Set a number of bins into which the data will be grouped.
