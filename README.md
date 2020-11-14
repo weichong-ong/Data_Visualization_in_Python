@@ -22,6 +22,27 @@ The five steps of the data analysis process:
 
 ## Univariate Data Exploration
 - Create bar charts for qualitative variables: `sns.countplot()`, `sns.barplot()`, `plt.bar()`
+
+```
+# Plot the Pokemon type on a Horizontal bar chart
+type_order = pokemon['type_1'].value_counts().index
+base_color = sb.color_palette()[0]
+sb.countplot(data=pkmn_types, y='type', color=base_color, order=type_order);
+
+# Logic to print the proportion text on the bars
+for i in range (type_counts.shape[0]):
+    # Remember, type_counts contains the frequency of unique values in the `type` column in decreasing order.
+    count = type_counts[i]
+    # Convert count into a percentage, and then into string
+    pct_string = '{:0.1f}'.format(100*count/n_pokemon)
+    # Print the string value on the bar.
+    # Read more about the arguments of text() function [here](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.text.html)
+    plt.text(count+1, i, pct_string, va='center')
+```
+<p align="center">
+  <img src="/images/Univariate_Countplot.png" width="400" />
+</p>
+
 - Create pie charts: `plt.pie()`
   - A pie chart is a common univariate plot type that is used to depict relative frequencies for levels of a categorical variable. A pie chart is preferably used when the number of categories is less, and you'd like to see the proportion of each category.
 - Create histograms for quantitative variables: `plt.hist()`, `sns.distplot()`, `sns.histplot()`
@@ -92,6 +113,22 @@ sb.regplot(data = fuel_econ, x = 'year', y = 'comb', truncate=False, x_jitter=0.
 ```
 <p align="center">
   <img src="/images/Bivariate_Plots_regplot.png" width="400" />
+</p>
+
+Plot the regression line on the transformed data
+```
+def log_trans(x, inverse = False):
+    if not inverse:
+        return np.log10(x)
+    else:
+        return np.power(10, x)
+
+sb.regplot(fuel_econ['displ'], fuel_econ['comb'].apply(log_trans))
+tick_locs = [10, 20, 50, 100]
+plt.yticks(log_trans(tick_locs), tick_locs);
+```
+<p align="center">
+  <img src="/images/Regplot_transformed_data.png" width="400" />
 </p>
 
 Heat maps are useful in the following cases:
@@ -440,6 +477,18 @@ g.add_legend()
   <img src="/images/Adaptations_Bivariate_Plots_Lineplot.png" width="400" />
 </p>
 
+Use catplot() to combine a barplot() and a FacetGrid. This allows grouping within additional categorical variables. Using catplot() is safer than using FacetGrid directly, as it ensures synchronization of variable order across facets:
+
+```
+g = sns.catplot(x="sex", y="total_bill",
+                hue="smoker", col="time",
+                data=tips, kind="bar",
+                height=4, aspect=.7);
+```
+<p align="center">
+  <img src="/images/Multivariate_Plot_Catplot.png" width="400" />
+</p>
+
 ### Plot Matrices
 #### The relationship between the numeric variables in the data
 ```
@@ -454,7 +503,7 @@ g.map_offdiag(plt.scatter)
 #### The relationship between the numeric and categorical variables in the data
 ```
 g = sb.PairGrid(data = df, x_vars = ['num_var1', 'num_var2', 'num_var3'],
-                y_vars = ['cat_var1','cat_var2'])
+                y_vars = ['cat_var1','cat_var2'], size=4)
 g.map(sb.violinplot, inner = 'quartile')
 ```
 <p align="center">
