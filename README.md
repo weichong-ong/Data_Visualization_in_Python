@@ -489,6 +489,21 @@ g = sns.catplot(x="sex", y="total_bill",
   <img src="/images/Multivariate_Plot_Catplot.png" width="400" />
 </p>
 
+```
+g = sns.catplot(x='rideable_type', y='duration',
+                hue="week_period", col='member_casual',
+                data=bay_wheels_master, kind="bar", estimator=np.median, color = base_color)
+(g.set_axis_labels('', 'Avg. Duration (min)')
+  .set_titles("{col_name}")
+  .set_xticklabels(['Electric Bike', 'Docked Bike']))
+plt.subplots_adjust(top=0.85)
+g.fig.suptitle('Average Trip Duration by User Type, Bike Type and Week Period')
+plt.show()
+```
+<p align="center">
+  <img src="/images/Multivariate_Plot_Catplot_with_title.png" width="400" />
+</p>
+
 ### Plot Matrices
 #### The relationship between the numeric variables in the data
 ```
