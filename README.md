@@ -20,6 +20,12 @@ The five steps of the data analysis process:
 4. Analyze - Here we might use either exploratory or explanatory visuals.
 5. Share - Here is where explanatory visuals live.
 
+As for further reading, I recommend the below links as they show the steps of good explanatory analysis in detail
+
+- [Comprehensive Data Exploration with Python](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python)
+- [Data Exploration and Analysis Using Python](https://towardsdatascience.com/data-exploration-and-analysis-using-python-e564473d7607)
+- [15 Data Exploration Techniques to Go from Data to Insights](https://towardsdatascience.com/15-data-exploration-techniques-to-go-from-data-to-insights-93f66e6805df)
+
 ## Univariate Data Exploration
 - Create bar charts for qualitative variables: `sns.countplot()`, `sns.barplot()`, `plt.bar()`
 
@@ -243,7 +249,7 @@ g.map(plt.hist, 'comb', bins = bin_edges);
   <img src="/images/Faceting_Bivariate_num_by_cat.png" width="400" />
 </p>
 
-Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**
+Mean of quantitative variable vs quatitative variable: **adapted bar charts**, **point plots**. Use point plots when the categorical variable has a meaningful order.
 
 ```
 base_color = sb.color_palette()[0]
@@ -416,6 +422,16 @@ sb.heatmap(cat_means, annot = True, fmt = '.3f',
 ```
 <p align="center">
   <img src="/images/Adaptations_Bivariate_Plots_heatmap_cat.png" width="400" />
+</p>
+
+```
+pivot = bay_wheels_master.pivot_table(values = 'duration', index = 'day_of_the_week', columns = 'pickup_hour', aggfunc='median')
+plt.figure(figsize = [16,8])
+sns.heatmap(pivot, annot=True, fmt='.1f', cbar_kws = {'label': 'Avg. Duration (min)'}, cmap = 'coolwarm')
+plt.title('Average Trip Duration by Day of the Week and Hour');
+```
+<p align="center">
+  <img src="/images/Multivariate_Plots_heatmap.png" width="400" />
 </p>
 
 An alternative approach for two quatitative variables and one quantitative variable is to adapt a clustered bar chart using the barplot function
