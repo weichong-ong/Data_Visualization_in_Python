@@ -1,17 +1,8 @@
 # Data Visualization
 ## Introduction
-I learned more than just how to code to create the visualizations.
-I also learned how to design the visualizations from using the right plot type to selecting appropriate variable encoding to create visualizations that are clear not just for me, but also for others.
-Summary statistics (Mean and standard deviation) can be misleading: [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
-It is important to pick out visual patterns, trends and outliers during the analysis.
-
-[Datasaurus](https://www.autodesk.com/research/publications/same-stats-different-graphs)
-
 There are two main reasons for creating visuals using data:
-
-Exploratory analysis is done when you are searching for insights. These visualizations don't need to be perfect. You are using plots to find insights, but they don't need to be aesthetically appealing. You are the consumer of these plots, and you need to be able to find the answer to your questions from these plots.
-
-Explanatory analysis is done when you are providing your results for others. These visualizations need to provide you the emphasis necessary to convey your message. They should be accurate, insightful, and visually appealing.
+1. Exploratory analysis is done when you are searching for insights. These visualizations don't need to be perfect. You are using plots to find insights, but they don't need to be aesthetically appealing. You are the consumer of these plots, and you need to be able to find the answer to your questions from these plots.
+2. Explanatory analysis is done when you are providing your results for others. These visualizations need to provide you the emphasis necessary to convey your message. They should be accurate, insightful, and visually appealing.
 
 The five steps of the data analysis process:
 1. Extract - Obtain the data from a spreadsheet, SQL, the web, etc.
@@ -619,6 +610,14 @@ plt.legend(['Fairy', 'Dragon'], title = 'Pokemon Type');
 </p>
 
 <!--
+
+I learned more than just how to code to create the visualizations.
+I also learned how to design the visualizations from using the right plot type to selecting appropriate variable encoding to create visualizations that are clear not just for me, but also for others.
+Summary statistics (Mean and standard deviation) can be misleading: [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
+It is important to pick out visual patterns, trends and outliers during the analysis.
+
+[Datasaurus](https://www.autodesk.com/research/publications/same-stats-different-graphs)
+
 Course Structure
 As this course covers a broad range of ways that data visualizations can be used in the data analysis process, there will also be a large number of topics that will be touched upon. Below is a summary of topics that will be covered in the remaining lessons in this course.
 
